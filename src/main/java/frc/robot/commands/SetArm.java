@@ -4,17 +4,19 @@
 
 package frc.robot.commands;
 
-import au.grapplerobotics.LaserCan;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;
-import frc.robot.subsystems.Intake;
+import com.ctre.phoenix6.controls.PositionVoltage;
 
-public class FeedIn extends Command {
-  /** Creates a new FeedIn. */
-  public final Intake m_Intake; 
-  public FeedIn(Intake intake) {
-    m_Intake = intake; 
-    addRequirements(intake);
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Launcher;
+
+public class SetArm extends Command {
+  /** Creates a new SetArm. */
+  public final Launcher m_Launcher;
+  public double m_Setpoint; 
+  public SetArm(Launcher launcher, double setpoint) {
+    m_Launcher = launcher;
+    m_Setpoint = setpoint;
+    addRequirements(launcher);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -25,8 +27,8 @@ public class FeedIn extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Intake.IntakeCenterMotor.set(0.2);
-    m_Intake.IntakeFeedMotor.set(0.2);
+    m_Launcher.ArmAngleMotor.setControl(m_Launcher.m_request.withPosition(m_Setpoint));
+
   }
 
   // Called once the command ends or is interrupted.
@@ -36,11 +38,6 @@ public class FeedIn extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean checkSensor = new Double(m_Intake.IntakeSensor.getMeasurement().toString()) < 200;
-    // 
-    //boolean checkArm = m_Launcher.ArmAngleSensor.getPosition() == 0;
-
-    //return new Double(m_Intake.IntakeSensor.getMeasurement().toString()) < 200;
-    return checkSensor;// && !checkArm; 
+    return false;
   }
 }

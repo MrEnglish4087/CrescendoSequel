@@ -14,6 +14,8 @@ package frc.robot;
  */
 public final class Constants {
   public static final int IntakeFeed = 20, IntakeCenter = 21, IntakeSensor = 22;
+  public static final int ArmAngle = 30, ArmSensor = 31, LaunchFeed = 32; 
+  public static final int LaunchRtFlywheel = 33, LaunchLtFlywheel = 34, LaunchSensor = 35; 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
