@@ -7,9 +7,12 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.FeedIn;
+import frc.robot.commands.LauncherFeeder;
+import frc.robot.commands.SetArm;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -49,11 +52,12 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    m_driverController.a().onTrue(new FeedIn(m_Intake) );
-       
-  
+    m_driverController.a().onTrue(Commands.race(
+                                                Commands.parallel(new FeedIn(m_Intake,false),
+                                                                  new SetArm(m_Launcher, 0.0))
+                                                                  .andThen(new FeedIn(m_Intake, true)),
+                                                new LauncherFeeder(m_Launcher)));      
   }
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

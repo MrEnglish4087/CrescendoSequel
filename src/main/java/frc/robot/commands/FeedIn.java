@@ -4,17 +4,22 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.StatusSignal;
+
 import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Launcher;
 
 public class FeedIn extends Command {
   /** Creates a new FeedIn. */
   public final Intake m_Intake; 
-  public FeedIn(Intake intake) {
+  public boolean m_SensorOverride;
+  public FeedIn(Intake intake,boolean SensorOverride) {
     m_Intake = intake; 
-    addRequirements(intake);
+    m_SensorOverride = SensorOverride;
+       addRequirements(intake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -31,16 +36,20 @@ public class FeedIn extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_Intake.IntakeCenterMotor.set(0.0);
+    m_Intake.IntakeFeedMotor.set(0.0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     boolean checkSensor = new Double(m_Intake.IntakeSensor.getMeasurement().toString()) < 200;
-    // 
-    //boolean checkArm = m_Launcher.ArmAngleSensor.getPosition() == 0;
+    
+    //boolean checkArm = m_Launcher.ArmAngleSensor.getPosition().//equals(0.0);
+
 
     //return new Double(m_Intake.IntakeSensor.getMeasurement().toString()) < 200;
-    return checkSensor;// && !checkArm; 
+    return checkSensor && !m_SensorOverride;  
   }
 }
